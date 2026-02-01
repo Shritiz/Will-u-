@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Big Question</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: #f3bed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  padding: 50px 60px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 90%;
+  position: relative;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 40px;
+  color: #ff4f9a;
+}
+
+.buttons {
+  position: relative;
+  width: 420px;
+  height: 200px;
+  margin: auto;
+}
+
+button {
+  padding: 14px 40px;
+  font-size: 22px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  position: relative;
+}
+
+.yes {
+  background: #4caf50;
+  color: white;
+}
+
+.no {
+  background: #f44336;
+  color: white;
+  position: absolute;
+}
+
+/* Hidden image at start */
+#resultImage {
+  display: none;
+  margin-top: 20px;
+  max-width: 300px;
+  border-radius: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+
+  <!-- CHANGE YOUR QUESTION HERE -->
+  <h1>Will u be my <br>Best Friend?</h1>
+
+  <div class="buttons" id="buttons">
+    <button class="yes" id="yesBtn" onclick="yesClicked()">Yes</button>
+    <button class="no" id="noBtn">No</button>
+  </div>
+
+  <img id="resultImage" src="input.png" alt="Result Image">
+
+</div>
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const area = document.getElementById("buttons");
+
+window.onload = () => {
+  yesBtn.style.position = "absolute";
+  yesBtn.style.left = "80px";
+  yesBtn.style.top = "80px";
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = "240px";
+  noBtn.style.top = "80px";
+};
+
+function escapeFrom(x, y) {
+  const rect = area.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+
+  const btnX = noBtn.offsetLeft + btnRect.width / 2;
+  const btnY = noBtn.offsetTop + btnRect.height / 2;
+
+  const dx = btnX - x;
+  const dy = btnY - y;
+
+  yesBtn.style.transform = "scale(1.5)";
+  noBtn.style.transform = "scale(0.5)";
+
+  let moveX = dx * 1.5;
+  let moveY = dy * 1.5;
+
+  let newX = noBtn.offsetLeft + moveX;
+  let newY = noBtn.offsetTop + moveY;
+
+  const maxX = rect.width - btnRect.width;
+  const maxY = rect.height - btnRect.height;
+
+  if (newX <= 0 || newX >= maxX) newX = Math.random() * maxX;
+  if (newY <= 0 || newY >= maxY) newY = Math.random() * maxY;
+
+  newX = Math.max(0, Math.min(maxX, newX));
+  newY = Math.max(0, Math.min(maxY, newY));
+
+  noBtn.style.left = newX + "px";
+  noBtn.style.top = newY + "px";
+}
+area.addEventListener("mousemove", (e) => {
+  const rect = area.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  escapeFrom(x, y);
+});
+noBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  const rect = area.getBoundingClientRect();
+  const touch = e.touches[0];
+
+  escapeFrom(touch.clientX - rect.left, touch.clientY - rect.top);
+});
+function yesClicked() {
+  area.style.display = "none";
+  document.getElementById("resultImage").style.display = "block";
+}
+</script>
+</body>
+</html>
