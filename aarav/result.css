@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, #3a001f, #12000a);
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+}
+
+.wrapper {
+  padding: 20px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px 25px;
+  border-radius: 20px;
+  text-align: center;
+  width: 300px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 40px rgba(255, 0, 100, 0.2);
+}
+
+.top-text {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+#percent {
+  font-size: 2.5rem;
+  color: #ff5c9d;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+
+.progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff4d88, #ff7eb3);
+  border-radius: 10px;
+  transition: width 0.1s linear;
+}
+
+.btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #ff4d88, #ff7eb3);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 0.3s;
+}
+
+.btn.enabled {
+  opacity: 1;
+}
+
+.warning {
+  margin-top: 15px;
+  color: #ff7eb3;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .card {
+    width: 90%;
+  }
+}

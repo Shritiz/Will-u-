@@ -1,0 +1,94 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, #3a001f, #12000a);
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+}
+
+.container {
+  text-align: center;
+  width: 320px;
+}
+
+.top-heart {
+  font-size: 24px;
+  margin-bottom: 10px;
+  animation: pulse 1.5s infinite;
+}
+
+.title {
+  color: #ff6fa5;
+  font-family: cursive;
+  margin-bottom: 25px;
+}
+
+/* Cards */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 18px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hidden overlay (THIS is the magic part) */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  transition: 0.5s;
+}
+
+/* When revealed */
+.card.revealed::before {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.card span {
+  opacity: 0.7;
+}
+
+/* Revealed text */
+.card.revealed {
+  background: linear-gradient(45deg, #ff4d88, #ff7eb3);
+  color: white;
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(255, 100, 150, 0.4);
+}
+
+/* Button */
+.btn {
+  margin-top: 25px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #ff4d88, #ff7eb3);
+  color: white;
+  cursor: pointer;
+}
+
+/* Animation */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.7; }
+}

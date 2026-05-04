@@ -1,0 +1,88 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full screen center */
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #3a001f, #1a0010);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Main container */
+.container {
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+
+/* Glowing circle */
+.circle {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 40px rgba(255, 100, 150, 0.6);
+}
+
+.tenor-gif-embed {
+  background: none !important;
+  background-color: transparent !important;
+  /* mix-blend-mode: multiply; */
+}
+.circle img {
+  width: 70%;
+}
+
+/* Title */
+.title {
+  font-size: 2.5rem;
+  color: #ff6fa5;
+  font-family: cursive;
+  margin-bottom: 10px;
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 25px;
+}
+
+/* Button */
+.btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #ff4d88, #ff7eb3);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* 📱 Responsive tweaks */
+@media (max-width: 600px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .circle {
+    width: 100px;
+    height: 100px;
+  }
+}
