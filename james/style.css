@@ -1,0 +1,182 @@
+:root{
+	--bg-1: #071226; /* page background */
+	--bg-2: #041018;
+	--card: #0b1724; /* mini-board background */
+	--surface-2: #0f1b2a;
+	--text: #e6f2ff;
+	--muted: #93a3b8;
+	--accent: #60a5fa; /* X */
+	--accent-2: #fb7185; /* O */
+	--big-line-color: rgba(255,255,255,0.12);
+	--inner-line-color: rgba(255,255,255,0.06);
+	--big-line-thickness: 8px;
+	--inner-line-thickness: 1px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+	margin:0;
+	font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+	background: linear-gradient(180deg,var(--bg-1),var(--bg-2));
+	color:var(--text);
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	padding:28px;
+}
+.app{width:min(920px,96vw)}
+h1{margin:0 0 12px 0;font-size:24px;color:var(--text)}
+.controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.status{font-weight:600;color:var(--text)}
+.buttons button{padding:8px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);cursor:pointer}
+.hint{font-size:13px;color:var(--muted);margin-top:12px}
+
+/* Big board: 3x3 of mini-boards */
+.big-board{
+	display:grid;
+	grid-template-columns:repeat(3,1fr);
+	gap:12px;
+	position:relative;
+}
+/* Thick solid outer grid lines between mini-boards */
+.big-board::before{
+	content:'';
+	position:absolute;
+	inset:0;
+	pointer-events:none;
+	z-index:2; /* behind overlays but above mini-boards */
+	background-image:
+		linear-gradient(var(--big-line-color), var(--big-line-color)),
+		linear-gradient(var(--big-line-color), var(--big-line-color)),
+		linear-gradient(var(--big-line-color), var(--big-line-color)),
+		linear-gradient(var(--big-line-color), var(--big-line-color));
+	background-repeat:no-repeat;
+	background-size: var(--big-line-thickness) 100%, var(--big-line-thickness) 100%, 100% var(--big-line-thickness), 100% var(--big-line-thickness);
+	background-position: 33.333% 0, 66.666% 0, 0 33.333%, 0 66.666%;
+}
+
+/* Mini-board */
+.small-board{
+	background:var(--card);
+	border-radius:8px;
+	padding:6px;
+	display:grid;
+	grid-template-columns:repeat(3,1fr);
+	gap:0; /* inner lines drawn by cell borders */
+	min-width:160px;
+	min-height:160px;
+	position:relative;
+	border:none; /* rely on the big-board lines */
+	z-index:1;
+	overflow:hidden;
+	box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
+}
+
+/* Active board highlighting (player dependent) */
+.player-x .small-board.active{
+	box-shadow:0 10px 28px rgba(96,165,250,0.12);
+	border-color:var(--accent);
+	z-index:5; /* bring above the big grid */
+}
+.player-o .small-board.active{
+	box-shadow:0 10px 28px rgba(251,113,133,0.12);
+	border-color:var(--accent-2);
+	z-index:5;
+}
+/* colored overlay to indicate playable mini-board */
+.player-x .small-board.active::after{
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: 6px;
+	background: linear-gradient(180deg, rgba(96,165,250,0.06), rgba(96,165,250,0.03));
+	pointer-events: none;
+	z-index:3; /* below the big X/O overlay */
+}
+.player-o .small-board.active::after{
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: 6px;
+	background: linear-gradient(180deg, rgba(251,113,133,0.06), rgba(251,113,133,0.03));
+	pointer-events: none;
+	z-index:3;
+}
+
+/* Captured mini-boards: strong tinted panels to show ownership */
+.small-board.won-x{
+	background: linear-gradient(180deg, rgba(96,165,250,0.18), rgba(29,78,216,0.22));
+	transition: background 200ms ease, border-color 200ms ease;
+	z-index:2;
+}
+.small-board.won-o{
+	background: linear-gradient(180deg, rgba(251,113,133,0.18), rgba(197,39,49,0.22));
+	transition: background 200ms ease, border-color 200ms ease;
+	z-index:2;
+}
+.small-board.draw{background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
+
+/* hide inner cells when captured so big X/O is readable */
+.small-board.won-x .cell,
+.small-board.won-o .cell,
+.small-board.draw .cell{
+	opacity:0;
+	transform:scale(0.98);
+	pointer-events:none;
+}
+
+/* Inner cells: thin lines like a classic tic-tac-toe */
+.cell{
+	background:transparent;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	font-size:28px;
+	font-weight:700;
+	height:44px;
+	cursor:pointer;
+	user-select:none;
+	border-right:var(--inner-line-thickness) solid var(--inner-line-color);
+	border-bottom:var(--inner-line-thickness) solid var(--inner-line-color);
+	color:var(--text);
+}
+/* remove right border on last column and bottom border on last row */
+.small-board .cell:nth-child(3n){ border-right: none }
+.small-board .cell:nth-child(n+7){ border-bottom: none }
+
+.cell.x{color:var(--accent)}
+.cell.o{color:var(--accent-2)}
+.cell:hover{background: rgba(255,255,255,0.02); transform: translateY(-1px)}
+
+/* overlay that shows large X/O when a mini-board is captured */
+.overlay{
+	position:absolute;
+	inset:0;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	font-size:72px;
+	font-weight:900;
+	color: #ffffff;
+	pointer-events:none;
+	transition:all 180ms ease;
+	z-index:6; /* ensure it sits above everything */
+	text-shadow: 0 6px 18px rgba(2,6,23,0.6);
+}
+.small-board.draw .overlay{font-size:18px;color:var(--muted)}
+
+/* strong visible X/O on captured mini-boards */
+.small-board.won-x .overlay{
+	color: #ffffff;
+	font-size:88px;
+}
+.small-board.won-o .overlay{
+	color: #ffffff;
+	font-size:88px;
+}
+
+@media (max-width:720px){
+	.small-board{min-width:110px;min-height:110px}
+	.cell{height:34px;font-size:20px}
+	.overlay{font-size:40px}
+}
