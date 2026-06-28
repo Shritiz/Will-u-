@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:wght@500;700;800&display=swap");
+
+        :root {
+            color-scheme: light;
+            --bg-main: #ff9fc7;
+            --bg-deep: #ff7bb3;
+            --text-main: #7b184c;
+            --text-strong: #5f1038;
+            --text-soft: rgba(123, 24, 76, 0.78);
+            --panel-shadow: rgba(214, 50, 120, 0.22);
+            --button-main: #ff6ba9;
+            --button-deep: #f84d93;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            font-family: "Nunito", Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at top, #ffd3e7 0%, rgba(255, 211, 231, 0) 42%),
+                linear-gradient(160deg, var(--bg-main), var(--bg-deep));
+            color: var(--text-main);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            isolation: isolate;
+        }
+
+        .hearts {
+            position: absolute;
+            inset: -20%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hearts::before,
+        .hearts::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-repeat: repeat;
+            animation: drift 16s linear infinite;
+            will-change: transform;
+        }
+
+        .hearts::before {
+            opacity: 0.95;
+            background-size: 170px 170px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170' viewBox='0 0 170 170'%3E%3Cpath fill='%23ffffff' fill-opacity='0.38' d='M51.5 34.5c-10.8 0-19.5 8.8-19.5 19.6 0 22.2 27.8 34.9 53 58.8 25.2-23.9 53-36.6 53-58.8 0-10.8-8.7-19.6-19.5-19.6-13 0-22 8.2-33.5 21.1C73.5 42.7 64.5 34.5 51.5 34.5Z'/%3E%3Cpath fill='%23ff4e96' fill-opacity='0.34' d='M118 121a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm-66 7a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm72-92a7 7 0 1 1 0 14 7 7 0 0 1 0-14Z'/%3E%3C/svg%3E");
+            filter: drop-shadow(0 10px 18px rgba(255, 87, 160, 0.12));
+        }
+
+        .hearts::after {
+            opacity: 0.65;
+            background-size: 240px 240px;
+            background-position: 70px 90px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cpath fill='%23ffffff' fill-opacity='0.25' d='M68 54c-12.2 0-22 9.9-22 22.1 0 25 31.3 39.4 59.6 66.3 28.3-26.9 59.6-41.3 59.6-66.3 0-12.2-9.8-22.1-22-22.1-14.6 0-24.8 9.1-37.6 23.7C92.8 63.1 82.6 54 68 54Z'/%3E%3Ccircle cx='43' cy='182' r='8' fill='%23ff4e96' fill-opacity='0.3'/%3E%3Ccircle cx='188' cy='167' r='10' fill='%23ff4e96' fill-opacity='0.2'/%3E%3C/svg%3E");
+            animation-duration: 24s;
+            mix-blend-mode: screen;
+        }
+
+        .content {
+            width: min(100%, 860px);
+        }
+
+        .panel {
+            padding: clamp(24px, 4vw, 34px);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 3px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 20px 55px var(--panel-shadow);
+        }
+
+        .title {
+            margin: 0;
+            text-align: center;
+            font-family: "Chewy", "Comic Sans MS", cursive;
+            font-size: clamp(2.5rem, 6vw, 4.4rem);
+            line-height: 1;
+            text-shadow: 0 4px 0 rgba(255, 196, 222, 0.85);
+        }
+
+        .subtitle {
+            margin: 12px auto 0;
+            max-width: 500px;
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-soft);
+        }
+
+        .qa-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 28px;
+        }
+
+        .qa-card {
+            width: 100%;
+            perspective: 1400px;
+        }
+
+        .qa-button {
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            font: inherit;
+            color: inherit;
+            text-align: left;
+        }
+
+        .qa-button:focus-visible {
+            outline: 3px solid rgba(248, 77, 147, 0.45);
+            outline-offset: 4px;
+            border-radius: 8px;
+        }
+
+        .qa-roller {
+            display: grid;
+            width: 100%;
+            transform-style: preserve-3d;
+            transform-origin: center center;
+            transition: transform 0.82s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .qa-face {
+            grid-area: 1 / 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 18px;
+            width: 100%;
+            padding: 22px 26px;
+            border-radius: 8px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .qa-question {
+            background: linear-gradient(180deg, var(--button-main), var(--button-deep));
+            color: var(--text-strong);
+            box-shadow: 0 12px 26px rgba(248, 77, 147, 0.26);
+            font-family: "Chewy", "Comic Sans MS", cursive;
+            font-size: clamp(1.35rem, 2.8vw, 1.95rem);
+            line-height: 1.25;
+            text-align: left;
+        }
+
+        .qa-answer {
+            background: linear-gradient(180deg, #fff8fc, #ffe6f1);
+            color: var(--text-strong);
+            box-shadow: inset 0 0 0 2px rgba(255, 148, 192, 0.32);
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.7;
+            text-align: left;
+            transform: rotateX(180deg);
+        }
+
+        .qa-copy {
+            display: block;
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .qa-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            flex: 0 0 auto;
+            font-family: "Chewy", "Comic Sans MS", cursive;
+            font-size: 1.35rem;
+            line-height: 1;
+            background: rgba(255, 255, 255, 0.45);
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35);
+        }
+
+        .qa-answer .qa-mark {
+            background: rgba(255, 140, 188, 0.22);
+            box-shadow: inset 0 0 0 2px rgba(255, 140, 188, 0.24);
+        }
+
+        .qa-card.is-open .qa-roller {
+            transform: rotateX(180deg);
+        }
+
+        .qa-card.is-open .qa-question {
+            box-shadow: 0 8px 20px rgba(248, 77, 147, 0.2);
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 26px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 150px;
+            min-height: 52px;
+            padding: 0 24px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.75);
+            color: var(--text-main);
+            text-decoration: none;
+            font-family: "Chewy", "Comic Sans MS", cursive;
+            font-size: 1.25rem;
+            box-shadow: 0 12px 24px rgba(214, 50, 120, 0.16);
+        }
+
+        @media (max-width: 720px) {
+            .qa-face {
+                padding: 20px 22px;
+            }
+
+            .qa-answer {
+                font-size: 0.98rem;
+            }
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate3d(0, 0, 0);
+            }
+
+            to {
+                transform: translate3d(-140px, -140px, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="hero">
+        <div class="hearts" aria-hidden="true"></div>
+        <section class="content">
+            <div class="panel">
+                <h1 class="title">Little Questions</h1>
+                <p class="subtitle">Each tile flips over to reveal its answer.</p>
+
+                <div class="qa-grid">
+                    <article class="qa-card">
+                        <button class="qa-button" type="button" aria-expanded="false">
+                            <span class="qa-roller">
+                                <span class="qa-face qa-question">
+                                    <span class="qa-copy">EG1 1</span>
+                                    <span class="qa-mark" aria-hidden="true">?</span>
+                                </span>
+                                <span class="qa-face qa-answer">
+                                    <span class="qa-copy">No</span>
+                                    <span class="qa-mark" aria-hidden="true">&#8635;</span>
+                                </span>
+                            </span>
+                        </button>
+                    </article>
+
+                    <article class="qa-card">
+                        <button class="qa-button" type="button" aria-expanded="false">
+                            <span class="qa-roller">
+                                <span class="qa-face qa-question">
+                                    <span class="qa-copy">Example 2</span>
+                                    <span class="qa-mark" aria-hidden="true">?</span>
+                                </span>
+                                <span class="qa-face qa-answer">
+                                    <span class="qa-copy">answer 2</span>
+                                    <span class="qa-mark" aria-hidden="true">&#8635;</span>
+                                </span>
+                            </span>
+                        </button>
+                    </article>
+
+                    <article class="qa-card">
+                        <button class="qa-button" type="button" aria-expanded="false">
+                            <span class="qa-roller">
+                                <span class="qa-face qa-question">
+                                    <span class="qa-copy">Example 3</span>
+                                    <span class="qa-mark" aria-hidden="true">?</span>
+                                </span>
+                                <span class="qa-face qa-answer">
+                                    <span class="qa-copy">Add your real answer here later.</span>
+                                    <span class="qa-mark" aria-hidden="true">&#8635;</span>
+                                </span>
+                            </span>
+                        </button>
+                    </article>
+
+                    <article class="qa-card">
+                        <button class="qa-button" type="button" aria-expanded="false">
+                            <span class="qa-roller">
+                                <span class="qa-face qa-question">
+                                    <span class="qa-copy">Example 4</span>
+                                    <span class="qa-mark" aria-hidden="true">?</span>
+                                </span>
+                                <span class="qa-face qa-answer">
+                                    <span class="qa-copy">Replace this one with the real text later too.</span>
+                                    <span class="qa-mark" aria-hidden="true">&#8635;</span>
+                                </span>
+                            </span>
+                        </button>
+                    </article>
+                </div>
+
+                <div class="footer-row">
+                    <a class="back-link" href="next2.html">Continue</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const qaCards = document.querySelectorAll(".qa-card");
+
+        qaCards.forEach(function (card) {
+            const button = card.querySelector(".qa-button");
+
+            button.addEventListener("click", function () {
+                const isOpen = card.classList.toggle("is-open");
+                button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:wght@500;700;800&display=swap");
+
+        :root {
+            color-scheme: light;
+            --bg-main: #ff9fc7;
+            --bg-deep: #ff7bb3;
+            --text-main: #7b184c;
+            --text-strong: #5f1038;
+            --text-soft: rgba(123, 24, 76, 0.78);
+            --panel-shadow: rgba(214, 50, 120, 0.22);
+            --paper-shadow: rgba(164, 42, 99, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            font-family: "Nunito", Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at top, #ffd3e7 0%, rgba(255, 211, 231, 0) 42%),
+                linear-gradient(160deg, var(--bg-main), var(--bg-deep));
+            color: var(--text-main);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            isolation: isolate;
+        }
+
+        .hearts {
+            position: absolute;
+            inset: -20%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hearts::before,
+        .hearts::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-repeat: repeat;
+            animation: drift 16s linear infinite;
+            will-change: transform;
+        }
+
+        .hearts::before {
+            opacity: 0.95;
+            background-size: 170px 170px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170' viewBox='0 0 170 170'%3E%3Cpath fill='%23ffffff' fill-opacity='0.38' d='M51.5 34.5c-10.8 0-19.5 8.8-19.5 19.6 0 22.2 27.8 34.9 53 58.8 25.2-23.9 53-36.6 53-58.8 0-10.8-8.7-19.6-19.5-19.6-13 0-22 8.2-33.5 21.1C73.5 42.7 64.5 34.5 51.5 34.5Z'/%3E%3Cpath fill='%23ff4e96' fill-opacity='0.34' d='M118 121a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm-66 7a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm72-92a7 7 0 1 1 0 14 7 7 0 0 1 0-14Z'/%3E%3C/svg%3E");
+            filter: drop-shadow(0 10px 18px rgba(255, 87, 160, 0.12));
+        }
+
+        .hearts::after {
+            opacity: 0.65;
+            background-size: 240px 240px;
+            background-position: 70px 90px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cpath fill='%23ffffff' fill-opacity='0.25' d='M68 54c-12.2 0-22 9.9-22 22.1 0 25 31.3 39.4 59.6 66.3 28.3-26.9 59.6-41.3 59.6-66.3 0-12.2-9.8-22.1-22-22.1-14.6 0-24.8 9.1-37.6 23.7C92.8 63.1 82.6 54 68 54Z'/%3E%3Ccircle cx='43' cy='182' r='8' fill='%23ff4e96' fill-opacity='0.3'/%3E%3Ccircle cx='188' cy='167' r='10' fill='%23ff4e96' fill-opacity='0.2'/%3E%3C/svg%3E");
+            animation-duration: 24s;
+            mix-blend-mode: screen;
+        }
+
+        .content {
+            width: min(100%, 900px);
+        }
+
+        .panel {
+            padding: clamp(24px, 4vw, 34px);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 3px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 20px 55px rgba(214, 50, 120, 0.22);
+        }
+
+        .title {
+            margin: 0;
+            text-align: center;
+            font-family: "Chewy", "Comic Sans MS", cursive;
+            font-size: clamp(2.5rem, 6vw, 4.4rem);
+            line-height: 1;
+            text-shadow: 0 4px 0 rgba(255, 196, 222, 0.85);
+        }
+
+        .subtitle {
+            margin: 12px auto 0;
+            max-width: 520px;
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-soft);
+        }
+
+        .letter-stage {
+            display: grid;
+            place-items: end center;
+            min-height: 560px;
+            margin-top: 30px;
+            perspective: 1700px;
+        }
+
+        .envelope-wrap {
+            position: relative;
+            --scene-height: 520px;
+            --pocket-height: 240px;
+            --flap-height: 132px;
+            --letter-bottom: 150px;
+            width: min(100%, 580px);
+            min-height: var(--scene-height);
+            height: var(--scene-height);
+        }
+
+        .envelope-trigger {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            color: inherit;
+            font: inherit;
+            z-index: 10;
+        }
+
+        .envelope-trigger:focus-visible {
+            outline: 3px solid rgba(248, 77, 147, 0.4);
+            outline-offset: 6px;
+            border-radius: 8px;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .envelope-scene {
+            position: relative;
+            width: 100%;
+            min-height: var(--scene-height);
+            height: var(--scene-height);
+        }
+
+        .envelope-shadow {
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            width: min(84%, 420px);
+            height: 28px;
+            border-radius: 999px;
+            background: rgba(148, 40, 94, 0.16);
+            transform: translateX(-50%);
+            filter: blur(10px);
+            transition: transform 0.9s ease, opacity 0.5s ease;
+        }
+
+        .letter {
+            position: absolute;
+            left: 50%;
+            bottom: var(--letter-bottom);
+            width: min(76%, 410px);
+            transform: translate(-50%, 168px) rotateX(-12deg);
+            transform-origin: center bottom;
+            transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 2;
+            filter: drop-shadow(0 18px 26px rgba(164, 42, 99, 0.16));
+        }
+
+        .letter-paper {
+            position: relative;
+            padding: 96px 28px 28px;
+            border-radius: 12px 12px 10px 10px;
+            background: linear-gradient(180deg, #fffdfa, #fff0f6);
+            border: 1px solid rgba(255, 177, 207, 0.55);
+            box-shadow: 0 16px 32px var(--paper-shadow);
+            overflow: visible;
+        }
+
+        .letter-paper::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(transparent 91%, rgba(255, 204, 223, 0.55) 91%, rgba(255, 204, 223, 0.55) 100%);
+            background-size: 100% 40px;
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .letter-fold {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 104px;
+            background: linear-gradient(180deg, #fff8fc, #ffdce9);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top center;
+            transition: transform 0.82s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 2;
+            box-shadow: 0 8px 16px rgba(214, 50, 120, 0.08);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .letter-content {
+            position: relative;
+            z-index: 1;
+            color: var(--text-strong);
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.4s ease 0.2s, transform 0.82s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+        }
+
+        .poem-title {
+            margin: 0;
+            font-family: "Chewy", "Comic Sans MS", cursive;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            line-height: 1.05;
+        }
+
+        .poem {
+            margin-top: 18px;
+            font-size: 1.02rem;
+            line-height: 1.85;
+            text-align: left;
+        }
+
+        .poem p {
+            margin: 0;
+        }
+
+        .poem p + p {
+            margin-top: 6px;
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            left: 50%;
+            bottom: 28px;
+            width: min(100%, 540px);
+            height: var(--pocket-height);
+            transform: translateX(-50%);
+        }
+
+        .envelope-back,
+        .envelope-front,
+        .envelope-flap {
+            position: absolute;
+            inset: 0;
+            border-radius: 22px;
+        }
+
+        .envelope-back {
+            background: linear-gradient(180deg, #ffc0da, #ff8abb);
+            box-shadow: 0 18px 30px rgba(214, 50, 120, 0.18);
+            z-index: 1;
+        }
+
+        .envelope-back::before {
+            content: "";
+            position: absolute;
+            inset: 14px;
+            border: 2px solid rgba(255, 242, 248, 0.45);
+            border-radius: 16px;
+        }
+
+        .envelope-front {
+            clip-path: polygon(0 38%, 50% 72%, 100% 38%, 100% 100%, 0 100%);
+            background: linear-gradient(180deg, #ff8bbd, #ff5fa2);
+            z-index: 4;
+        }
+
+        .envelope-front::before,
+        .envelope-front::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+        }
+
+        .envelope-front::before {
+            clip-path: polygon(0 38%, 50% 72%, 0 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0));
+        }
+
+        .envelope-front::after {
+            clip-path: polygon(100% 38%, 50% 72%, 100% 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+        }
+
+        .envelope-flap {
+            height: var(--flap-height);
+            background: linear-gradient(180deg, #ffd8e8, #ff9fc7);
+            clip-path: polygon(0 0, 50% 82%, 100% 0);
+            transform-origin: top center;
+            transition: transform 0.82s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 5;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .seal {
+            position: absolute;
+            left: 50%;
+            top: 88px;
+            width: 56px;
+            height: 56px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #fff6fb, #ffdce9);
+            transform: translateX(-50%);
+            box-shadow: 0 10px 18px rgba(214, 50, 120, 0.16);
+            z-index: 6;
+            transition: transform 0.45s ease, opacity 0.3s ease;
+        }
+
+        .seal::before,
+        .seal::after {
+            content: "";
+            position: absolute;
+            background: #ff5ea1;
+        }
+
+        .seal::before {
+            width: 16px;
+            height: 26px;
+            left: 13px;
+            top: 14px;
+            border-radius: 16px 16px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: bottom left;
+        }
+
+        .seal::after {
+            width: 16px;
+            height: 26px;
+            left: 27px;
+            top: 14px;
+            border-radius: 16px 16px 0 0;
+            transform: rotate(45deg);
+            transform-origin: bottom right;
+        }
+
+        .scene-open .letter {
+            transform: translate(-50%, -28px) rotateX(0deg);
+        }
+
+        .scene-open .letter-fold {
+            transform: rotateX(-185deg) translateY(-6px);
+        }
+
+        .scene-open .letter-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scene-open .envelope-flap {
+            transform: rotateX(-185deg);
+        }
+
+        .scene-open .seal {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.82);
+        }
+
+        .scene-open .envelope-shadow {
+            transform: translateX(-50%) scaleX(1.08);
+            opacity: 0.78;
+        }
+
+        @media (max-width: 720px) {
+            .letter-stage {
+                min-height: 500px;
+            }
+
+            .envelope-wrap {
+                --scene-height: 460px;
+                --pocket-height: 210px;
+                --flap-height: 116px;
+                --letter-bottom: 138px;
+            }
+
+            .letter {
+                width: min(82%, 390px);
+            }
+
+            .letter-paper {
+                padding: 88px 22px 24px;
+            }
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate3d(0, 0, 0);
+            }
+
+            to {
+                transform: translate3d(-140px, -140px, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="hero">
+        <div class="hearts" aria-hidden="true"></div>
+        <section class="content">
+            <div class="panel">
+                <h1 class="title">A Little Letter</h1>
+                <p class="subtitle">Click the envelope to pull the page out and unfold the poem.</p>
+
+                <div class="letter-stage">
+                    <div class="envelope-wrap">
+                        <div class="envelope-scene" id="envelopeScene">
+                            <div class="envelope-shadow" aria-hidden="true"></div>
+
+                            <div class="letter" aria-hidden="true">
+                                <div class="letter-paper">
+                                    <div class="letter-fold"></div>
+                                    <div class="letter-content">
+                                        <h2 class="poem-title">For You</h2>
+                                        <div class="poem">
+                                            <p>Two hearts met by chance,</p>
+                                            <p>Two souls chose to stay.</p>
+                                            <p>In every smile, a little sunrise,</p>
+                                            <p>In every glance, a brighter day.</p>
+                                            <br>
+                                            <p>May your laughter outlast the storms,</p>
+                                            <p>May your dreams always take flight.</p>
+                                            <p>Like two birds sharing the endless sky,</p>
+                                            <p>May you always find your way back to each other.</p>
+                                            <br>
+                                            <p>For love is not in grand gestures alone,</p>
+                                            <p>But in every little "I'm here" whispered through time.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="envelope-pocket" aria-hidden="true">
+                                <div class="envelope-back"></div>
+                                <div class="envelope-flap"></div>
+                                <div class="envelope-front"></div>
+                                <div class="seal"></div>
+                            </div>
+                        </div>
+                        <button class="envelope-trigger" id="envelopeTrigger" type="button" aria-expanded="false" aria-controls="envelopeScene">
+                            <span class="visually-hidden">Open the envelope</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const envelopeTrigger = document.getElementById("envelopeTrigger");
+        const envelopeScene = document.getElementById("envelopeScene");
+        const envelopeWrap = document.querySelector(".envelope-wrap");
+        const letterStage = document.querySelector(".letter-stage");
+        const letterPaper = document.querySelector(".letter-paper");
+
+        function syncEnvelopeLayout() {
+            const isMobile = window.matchMedia("(max-width: 720px)").matches;
+            const baseSceneHeight = isMobile ? 460 : 520;
+            const basePocketHeight = isMobile ? 210 : 240;
+            const baseFlapHeight = isMobile ? 116 : 132;
+            const letterBottom = isMobile ? 138 : 150;
+            const openLift = 28;
+            const paperHeight = Math.ceil(letterPaper.getBoundingClientRect().height);
+            const desiredPocketHeight = Math.round(paperHeight * 0.58);
+            const maxPocketHeight = Math.max(basePocketHeight, paperHeight - 72);
+            const pocketHeight = Math.max(basePocketHeight, Math.min(desiredPocketHeight, maxPocketHeight));
+            const flapHeight = Math.max(baseFlapHeight, Math.min(Math.round(pocketHeight * 0.55), 188));
+            const sceneHeight = Math.max(baseSceneHeight, paperHeight + letterBottom + openLift + 40);
+
+            envelopeWrap.style.setProperty("--scene-height", `${sceneHeight}px`);
+            envelopeWrap.style.setProperty("--pocket-height", `${pocketHeight}px`);
+            envelopeWrap.style.setProperty("--flap-height", `${flapHeight}px`);
+            envelopeWrap.style.setProperty("--letter-bottom", `${letterBottom}px`);
+            letterStage.style.minHeight = `${sceneHeight}px`;
+        }
+
+        envelopeTrigger.addEventListener("click", function () {
+            const isOpen = envelopeScene.classList.toggle("scene-open");
+            envelopeTrigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        syncEnvelopeLayout();
+        window.addEventListener("resize", syncEnvelopeLayout);
+
+        if ("ResizeObserver" in window) {
+            const resizeObserver = new ResizeObserver(syncEnvelopeLayout);
+            resizeObserver.observe(letterPaper);
+        }
+    </script>
+</body>
+</html>

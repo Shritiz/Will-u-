@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink Hearts</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:wght@500;700;800&display=swap");
+
+        :root {
+            color-scheme: light;
+            --bg-main: #ff9fc7;
+            --bg-deep: #ff7bb3;
+            --text-main: #7b184c;
+            --text-soft: rgba(123, 24, 76, 0.78);
+            --panel-shadow: rgba(214, 50, 120, 0.22);
+            --button-main: #ff6ba9;
+            --button-deep: #f84d93;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            font-family: "Nunito", Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at top, #ffd3e7 0%, rgba(255, 211, 231, 0) 42%),
+                linear-gradient(160deg, var(--bg-main), var(--bg-deep));
+            color: var(--text-main);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            isolation: isolate;
+        }
+
+        .hearts {
+            position: absolute;
+            inset: -20%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hearts::before,
+        .hearts::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-repeat: repeat;
+            animation: drift 16s linear infinite;
+            will-change: transform;
+        }
+
+        .hearts::before {
+            opacity: 0.95;
+            background-size: 170px 170px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170' viewBox='0 0 170 170'%3E%3Cpath fill='%23ffffff' fill-opacity='0.38' d='M51.5 34.5c-10.8 0-19.5 8.8-19.5 19.6 0 22.2 27.8 34.9 53 58.8 25.2-23.9 53-36.6 53-58.8 0-10.8-8.7-19.6-19.5-19.6-13 0-22 8.2-33.5 21.1C73.5 42.7 64.5 34.5 51.5 34.5Z'/%3E%3Cpath fill='%23ff4e96' fill-opacity='0.34' d='M118 121a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm-66 7a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm72-92a7 7 0 1 1 0 14 7 7 0 0 1 0-14Z'/%3E%3C/svg%3E");
+            filter: drop-shadow(0 10px 18px rgba(255, 87, 160, 0.12));
+        }
+
+        .hearts::after {
+            opacity: 0.65;
+            background-size: 240px 240px;
+            background-position: 70px 90px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cpath fill='%23ffffff' fill-opacity='0.25' d='M68 54c-12.2 0-22 9.9-22 22.1 0 25 31.3 39.4 59.6 66.3 28.3-26.9 59.6-41.3 59.6-66.3 0-12.2-9.8-22.1-22-22.1-14.6 0-24.8 9.1-37.6 23.7C92.8 63.1 82.6 54 68 54Z'/%3E%3Ccircle cx='43' cy='182' r='8' fill='%23ff4e96' fill-opacity='0.3'/%3E%3Ccircle cx='188' cy='167' r='10' fill='%23ff4e96' fill-opacity='0.2'/%3E%3C/svg%3E");
+            animation-duration: 24s;
+            mix-blend-mode: screen;
+        }
+
+        .content {
+            width: min(100%, 540px);
+        }
+
+        .panel {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.96);
+            border: 3px solid rgba(255, 255, 255, 0.85);
+            border-radius: 8px;
+            box-shadow: 0 20px 55px var(--panel-shadow);
+            padding: clamp(24px, 4vw, 34px);
+        }
+
+        .title {
+            margin: 0;
+            font-family: "Chewy", "Comic Sans MS", cursive;
+            font-size: clamp(2.6rem, 7vw, 4.6rem);
+            line-height: 1;
+            color: var(--text-main);
+            text-shadow: 0 4px 0 rgba(255, 196, 222, 0.85);
+        }
+
+        .subtitle {
+            margin: 12px auto 0;
+            max-width: 360px;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--text-soft);
+        }
+
+        .image-frame {
+            position: relative;
+            margin-top: 24px;
+            padding: 14px;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #ffe6f1, #ffd2e7);
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.7);
+        }
+
+        .image-frame img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .image-frame img.ready {
+            opacity: 1;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            inset: 14px;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            border: 2px dashed rgba(248, 77, 147, 0.35);
+            border-radius: 8px;
+            color: rgba(123, 24, 76, 0.72);
+            font-size: 1rem;
+            line-height: 1.6;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.45);
+        }
+
+        .image-frame.has-image .image-placeholder {
+            display: none;
+        }
+
+        .button-wrap {
+            margin-top: 24px;
+        }
+
+        .continue-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+            min-height: 56px;
+            padding: 0 28px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, var(--button-main), var(--button-deep));
+            color: #fff8fc;
+            text-decoration: none;
+            font-family: "Chewy", "Comic Sans MS", cursive;
+            font-size: 1.45rem;
+            box-shadow: 0 12px 24px rgba(248, 77, 147, 0.28);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(248, 77, 147, 0.34);
+        }
+
+        .continue-btn:active {
+            transform: translateY(0);
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate3d(0, 0, 0);
+            }
+
+            to {
+                transform: translate3d(-140px, -140px, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="hero">
+        <div class="hearts" aria-hidden="true"></div>
+        <section class="content">
+            <div class="panel">
+                <h1 class="title">From your jerry</h1>
+                <div class="image-frame" id="imageFrame">
+                    <img
+                        src="img.jpg"
+                        alt="Special image from Jerry"
+                        id="mainImage"
+                    >
+                    <div class="image-placeholder">Add <strong>img.jpg</strong> here</div>
+                </div>
+                <div class="button-wrap">
+                    <a class="continue-btn" href="next.html">Continue</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        const mainImage = document.getElementById("mainImage");
+        const imageFrame = document.getElementById("imageFrame");
+
+        function showImage() {
+            imageFrame.classList.add("has-image");
+            mainImage.classList.add("ready");
+        }
+
+        mainImage.addEventListener("load", showImage);
+
+        if (mainImage.complete && mainImage.naturalWidth > 0) {
+            showImage();
+        }
+    </script>
+</body>
+</html>
