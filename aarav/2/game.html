@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phrase Match</title>
+    <link rel="stylesheet" href="theme.css">
+</head>
+<body class="page-game">
+    <main class="shell">
+        <header class="topbar">
+            <span class="progress-chip">04 / 05</span>
+            <a class="ghost-link" href="next2.html">Back to the letter</a>
+        </header>
+
+        <section class="main-panel">
+            <div class="section-heading center">
+                <p class="kicker">Little Memory Game</p>
+                <h1 class="hero-title medium">Match the little things we say.</h1>
+                <p class="hero-copy narrow">
+                    Every pair hides a familiar phrase. Find all eight and the last surprise unlocks itself.
+                </p>
+            </div>
+
+            <div class="game-stage">
+                <div class="game-status">
+                    <div class="game-pill">
+                        <span class="game-pill-label">Pairs matched</span>
+                        <strong class="game-progress-count" id="progressText">0 / 8 pairs matched</strong>
+                    </div>
+                    <p class="game-note">No timer. No pressure. Just a soft little game to stay a bit longer.</p>
+                </div>
+
+                <div class="memory-shell">
+                    <div class="memory-board" id="memoryBoard" aria-label="Phrase matching game board"></div>
+
+                    <div class="game-win-panel" id="gameWinPanel" aria-hidden="true">
+                        <div class="game-win-card">
+                            <p class="kicker">You did it</p>
+                            <h2 class="hero-title medium">You matched every little thing.</h2>
+                            <p class="hero-copy narrow">One last surprise is waiting for you.</p>
+                            <div class="game-actions">
+                                <a class="primary-btn" href="reveal.html">Unlock it</a>
+                                <button class="secondary-btn" id="replayGameBtn" type="button">Play again</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-footer">
+                    <button class="secondary-btn" id="restartBoardBtn" type="button">Shuffle again</button>
+                    <a class="ghost-link" href="index.html">Start from the beginning</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const phrases = [
+            "I love you",
+            "Miss you",
+            "Come here",
+            "Hold me",
+            "Need you",
+            "Stay close",
+            "My person",
+            "Always us"
+        ];
+
+        const memoryBoard = document.getElementById("memoryBoard");
+        const progressText = document.getElementById("progressText");
+        const gameWinPanel = document.getElementById("gameWinPanel");
+        const restartBoardBtn = document.getElementById("restartBoardBtn");
+        const replayGameBtn = document.getElementById("replayGameBtn");
+
+        let cards = [];
+        let openIndexes = [];
+        let matchedPairs = 0;
+        let lockBoard = false;
+
+        function escapeHtml(value) {
+            return value
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function shuffleCards(items) {
+            const nextItems = items.slice();
+
+            for (let index = nextItems.length - 1; index > 0; index -= 1) {
+                const swapIndex = Math.floor(Math.random() * (index + 1));
+                const currentValue = nextItems[index];
+
+                nextItems[index] = nextItems[swapIndex];
+                nextItems[swapIndex] = currentValue;
+            }
+
+            return nextItems;
+        }
+
+        function updateProgress() {
+            progressText.textContent = `${matchedPairs} / ${phrases.length} pairs matched`;
+            memoryBoard.setAttribute("aria-busy", lockBoard ? "true" : "false");
+        }
+
+        function renderBoard() {
+            memoryBoard.innerHTML = cards.map(function (card, index) {
+                const isOpen = card.open || card.matched;
+                const cardClasses = [
+                    "memory-card",
+                    isOpen ? "is-open" : "",
+                    card.matched ? "is-matched" : ""
+                ].filter(Boolean).join(" ");
+                const cardLabel = isOpen ? `Revealed phrase: ${card.phrase}` : "Hidden phrase card";
+
+                return `
+                    <button
+                        class="${cardClasses}"
+                        data-index="${index}"
+                        type="button"
+                        aria-label="${escapeHtml(cardLabel)}"
+                        aria-pressed="${isOpen ? "true" : "false"}"
+                    >
+                        <div class="memory-card-inner">
+                            <div class="memory-face back">
+                                <span class="memory-mini">tap to reveal</span>
+                                <span class="memory-text">little clue</span>
+                                <span class="memory-mark" aria-hidden="true">&#8635;</span>
+                            </div>
+                            <div class="memory-face front">
+                                <span class="memory-mini">match me</span>
+                                <span class="memory-text">${escapeHtml(card.phrase)}</span>
+                                <span class="memory-mark" aria-hidden="true">&#10084;</span>
+                            </div>
+                        </div>
+                    </button>
+                `;
+            }).join("");
+        }
+
+        function showWinPanel() {
+            gameWinPanel.classList.add("is-visible");
+            gameWinPanel.setAttribute("aria-hidden", "false");
+        }
+
+        function hideWinPanel() {
+            gameWinPanel.classList.remove("is-visible");
+            gameWinPanel.setAttribute("aria-hidden", "true");
+        }
+
+        function resetOpenCards() {
+            openIndexes.forEach(function (index) {
+                cards[index].open = false;
+            });
+
+            openIndexes = [];
+        }
+
+        function checkForMatch() {
+            const firstIndex = openIndexes[0];
+            const secondIndex = openIndexes[1];
+            const isMatch = cards[firstIndex].phrase === cards[secondIndex].phrase;
+
+            lockBoard = true;
+            updateProgress();
+
+            if (isMatch) {
+                window.setTimeout(function () {
+                    cards[firstIndex].matched = true;
+                    cards[secondIndex].matched = true;
+                    resetOpenCards();
+                    matchedPairs += 1;
+                    lockBoard = false;
+                    updateProgress();
+                    renderBoard();
+
+                    if (matchedPairs === phrases.length) {
+                        window.setTimeout(showWinPanel, 240);
+                    }
+                }, 320);
+
+                return;
+            }
+
+            window.setTimeout(function () {
+                resetOpenCards();
+                lockBoard = false;
+                updateProgress();
+                renderBoard();
+            }, 860);
+        }
+
+        function onCardClick(index) {
+            if (lockBoard) {
+                return;
+            }
+
+            const card = cards[index];
+
+            if (!card || card.open || card.matched) {
+                return;
+            }
+
+            card.open = true;
+            openIndexes.push(index);
+            renderBoard();
+
+            if (openIndexes.length === 2) {
+                checkForMatch();
+            }
+        }
+
+        function buildCards() {
+            const deck = phrases.concat(phrases).map(function (phrase, index) {
+                return {
+                    id: index,
+                    phrase: phrase,
+                    open: false,
+                    matched: false
+                };
+            });
+
+            return shuffleCards(deck);
+        }
+
+        function initializeGame() {
+            cards = buildCards();
+            openIndexes = [];
+            matchedPairs = 0;
+            lockBoard = false;
+            hideWinPanel();
+            updateProgress();
+            renderBoard();
+        }
+
+        memoryBoard.addEventListener("click", function (event) {
+            const button = event.target.closest(".memory-card");
+
+            if (!button) {
+                return;
+            }
+
+            onCardClick(Number(button.dataset.index));
+        });
+
+        restartBoardBtn.addEventListener("click", initializeGame);
+        replayGameBtn.addEventListener("click", initializeGame);
+
+        initializeGame();
+    </script>
+</body>
+</html>

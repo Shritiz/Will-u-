@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Surprise</title>
+    <link rel="stylesheet" href="theme.css">
+</head>
+<body class="page-reveal">
+    <main class="shell">
+        <header class="topbar">
+            <span class="progress-chip">05 / 05</span>
+            <a class="ghost-link" href="game.html">Back to the game</a>
+        </header>
+
+        <section class="main-panel">
+            <div class="reveal-layout">
+                <div class="reveal-frame">
+                    <div class="reveal-image-shell" id="revealImageShell">
+                        <img src="reward.jpg" alt="Final reveal portrait" id="revealImage">
+                        <div class="reveal-overlay" aria-hidden="true"></div>
+                        <div class="reveal-placeholder">
+                            <div>
+                                <p class="kicker">Reward Image</p>
+                                <h2 class="hero-title medium">Drop in reward.jpg</h2>
+                                <p class="hero-copy narrow">
+                                    This final page is ready for the reveal. Add a photo named <strong>reward.jpg</strong>
+                                    in this folder whenever you want to swap in the finished surprise.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-note-card">
+                    <p class="kicker">Final Reveal</p>
+                    <h1 class="hero-title medium">And here is the surprise.</h1>
+                    <p class="hero-copy narrow">
+                        You stayed through every little page, every question, and every hidden phrase.
+                        So this last moment gets to linger for one extra heartbeat.
+                    </p>
+
+                    <div class="reveal-note">
+                        Some people feel like comfort and excitement at the same time.
+                        This page was always meant to end with that feeling.
+                    </div>
+
+                    <div class="reveal-signature">With love, Jerry</div>
+
+                    <div class="reveal-actions">
+                        <a class="primary-btn" href="game.html">Play again</a>
+                        <a class="secondary-btn" href="index.html">Start from the beginning</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const revealImage = document.getElementById("revealImage");
+        const revealImageShell = document.getElementById("revealImageShell");
+
+        function showRevealImage() {
+            revealImageShell.classList.add("has-image");
+            revealImage.classList.add("ready");
+        }
+
+        function showRevealPlaceholder() {
+            revealImageShell.classList.remove("has-image");
+            revealImage.classList.remove("ready");
+        }
+
+        revealImage.addEventListener("load", showRevealImage);
+        revealImage.addEventListener("error", showRevealPlaceholder);
+
+        if (revealImage.complete && revealImage.naturalWidth > 0) {
+            showRevealImage();
+        }
+    </script>
+</body>
+</html>
