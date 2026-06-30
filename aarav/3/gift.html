@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Your Gift</title>
+    <link rel="stylesheet" href="theme.css">
+    <script src="site.js" defer></script>
+</head>
+<body class="page-gift">
+    <main class="shell shell-wide">
+        <header class="topbar">
+            <span class="progress-chip">03 / 05</span>
+            <span class="micro-note">One click for the gift. One more click for the biggest memory.</span>
+        </header>
+
+        <section class="main-panel gift-panel">
+            <div class="gift-stage" id="giftStage" tabindex="0" role="button" aria-label="Open the birthday gift and reveal the memories">
+                <div class="gift-stage-copy" id="giftStageCopy">
+                    <p class="kicker">Birthday Present</p>
+                    <h1 class="hero-title medium">Tap the pink gift, Tannu.</h1>
+                    <p class="hero-copy narrow" id="giftStatusText">
+                        It starts in the dark, just for one little dramatic moment. Then the memories take over.
+                    </p>
+                </div>
+
+                <div class="gift-box" id="giftBox" aria-hidden="true">
+                    <div class="gift-burst gift-burst-a"></div>
+                    <div class="gift-burst gift-burst-b"></div>
+                    <div class="gift-burst gift-burst-c"></div>
+                    <div class="gift-lid"></div>
+                    <div class="gift-ribbon ribbon-vertical"></div>
+                    <div class="gift-ribbon ribbon-horizontal"></div>
+                    <div class="gift-body-box"></div>
+                    <div class="gift-bow bow-left"></div>
+                    <div class="gift-bow bow-right"></div>
+                    <div class="gift-tag">From Jerry</div>
+                </div>
+
+                <div class="memory-stage" id="memoryStage" aria-live="polite"></div>
+
+                <div class="screen-prompt" id="collagePrompt" aria-hidden="true">
+                    Tap again for the giant birthday memory.
+                </div>
+
+                <div class="main-photo-overlay" id="mainPhotoOverlay" aria-hidden="true">
+                    <div class="main-photo-card">
+                        <div class="main-photo-shell" id="mainPhotoShell">
+                            <img src="assets/Main.png" alt="Main birthday memory" id="mainPhoto">
+                            <div class="main-photo-placeholder">
+                                <p class="kicker">Main Image</p>
+                                <h2 class="hero-title medium">Add <span>Main.png</span></h2>
+                                <p class="hero-copy narrow">
+                                    The big final photo reveal is wired up and ready. Drop <strong>Main.png</strong>
+                                    into the <strong>assets</strong> folder whenever you want this moment to go live.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="button-row center-row">
+                            <a class="primary-btn" href="final.html">Continue the birthday message</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
