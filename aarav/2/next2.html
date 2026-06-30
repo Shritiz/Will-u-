@@ -28,9 +28,16 @@
                 <div class="envelope-wrap">
                     <div class="envelope-scene" id="envelopeScene">
                         <div class="envelope-shadow" aria-hidden="true"></div>
+                        <div class="letter-spark spark-a" aria-hidden="true"></div>
+                        <div class="letter-spark spark-b" aria-hidden="true"></div>
+                        <div class="letter-spark spark-c" aria-hidden="true"></div>
 
                         <div class="letter" aria-hidden="true">
                             <div class="letter-paper">
+                                <div class="letter-paper-top">
+                                    <span class="letter-pill">Private Note</span>
+                                    <span class="letter-stamp">For you</span>
+                                </div>
                                 <div class="letter-fold"></div>
                                 <div class="letter-content">
                                     <h2 class="poem-title">For You</h2>
@@ -55,9 +62,12 @@
 
                         <div class="envelope-pocket" aria-hidden="true">
                             <div class="envelope-back"></div>
+                            <div class="envelope-liner"></div>
                             <div class="envelope-flap"></div>
                             <div class="envelope-front"></div>
-                            <div class="seal"></div>
+                            <div class="seal">
+                                <span class="seal-core">J</span>
+                            </div>
                         </div>
                     </div>
                     <button class="envelope-trigger" id="envelopeTrigger" type="button" aria-expanded="false" aria-controls="envelopeScene">
@@ -98,11 +108,17 @@
             const pocketHeight = Math.max(basePocketHeight, Math.min(desiredPocketHeight, maxPocketHeight));
             const flapHeight = Math.max(baseFlapHeight, Math.min(Math.round(pocketHeight * 0.55), 196));
             const sceneHeight = Math.max(baseSceneHeight, paperHeight + letterBottom + openLift + 48);
+            const closedBottom = Math.max(22, Math.min(38, Math.round(pocketHeight * 0.12)));
+            const hiddenOffset = Math.max(
+                isMobile ? 104 : 126,
+                letterBottom - closedBottom
+            );
 
             envelopeWrap.style.setProperty("--scene-height", `${sceneHeight}px`);
             envelopeWrap.style.setProperty("--pocket-height", `${pocketHeight}px`);
             envelopeWrap.style.setProperty("--flap-height", `${flapHeight}px`);
             envelopeWrap.style.setProperty("--letter-bottom", `${letterBottom}px`);
+            envelopeWrap.style.setProperty("--letter-closed-offset", `${hiddenOffset}px`);
             letterStage.style.minHeight = `${sceneHeight}px`;
         }
 
