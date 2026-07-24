@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aarav's Birthday Gift</title>
+    <link rel="stylesheet" href="theme.css">
+    <script src="site.js" defer></script>
+</head>
+<body class="page-gift">
+    <main class="shell shell-wide">
+        <header class="topbar">
+            <span class="progress-chip">03 / 05</span>
+            <span class="micro-note">Click the gift, then collect every birthday card.</span>
+        </header>
+
+        <section class="main-panel gift-panel">
+            <div class="gift-stage" id="giftStage" tabindex="0" role="button" aria-label="Open Aarav's birthday gift">
+                <div class="gift-stage-copy">
+                    <p class="kicker">Gift Drop</p>
+                    <h1 class="hero-title medium">Open it, Aarav.</h1>
+                    <p class="hero-copy narrow" id="giftStatusText">
+                        The gift starts locked. Tap it once and the birthday cards will scatter across the screen.
+                    </p>
+                </div>
+
+                <div class="gift-box" id="giftBox" aria-hidden="true">
+                    <div class="gift-burst gift-burst-a"></div>
+                    <div class="gift-burst gift-burst-b"></div>
+                    <div class="gift-burst gift-burst-c"></div>
+                    <div class="gift-lid"></div>
+                    <div class="gift-ribbon ribbon-vertical"></div>
+                    <div class="gift-ribbon ribbon-horizontal"></div>
+                    <div class="gift-body-box"></div>
+                    <div class="gift-bow bow-left"></div>
+                    <div class="gift-bow bow-right"></div>
+                    <div class="gift-tag">For Aarav</div>
+                </div>
+
+                <div class="wish-stage" id="wishStage" aria-live="polite"></div>
+
+                <div class="screen-prompt" id="giftPrompt" aria-hidden="true">
+                    Tap one more time for the final message.
+                </div>
+
+                <div class="main-photo-overlay" id="finalOverlay" aria-hidden="true">
+                    <div class="final-reveal-card">
+                        <img src="assets/hero-Aarav.png" alt="Birthday celebration for Aarav">
+                        <p class="kicker">Final Unlock</p>
+                        <h2 class="hero-title medium">Birthday level complete.</h2>
+                        <p class="hero-copy center">
+                            Cake cleared, gift opened, wishes collected. Only the final note is left.
+                        </p>
+                        <div class="button-row center-row">
+                            <a class="primary-btn" href="final.html">Read the birthday note</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Guestbook</title>
+    <link rel="stylesheet" href="theme.css">
+    <script src="site.js" defer></script>
+</head>
+<body class="page-message-board">
+    <main class="shell">
+        <header class="topbar">
+            <span class="progress-chip">05 / 05</span>
+            <a class="ghost-link" href="final.html">Back to final page</a>
+        </header>
+
+        <section class="main-panel message-board-panel">
+            <div class="section-heading center">
+                <p class="kicker">Birthday guestbook</p>
+                <h1 class="hero-title medium">Leave a note</h1>
+                <p class="hero-copy narrow">
+                    Write a message for Aarav and it will be saved in the table below.
+                </p>
+            </div>
+
+            <div class="message-board-layout">
+                <form id="messageForm" class="message-form">
+                    <label class="field-label" for="nameInput">
+                        Your name
+                        <input id="nameInput" name="name" type="text" placeholder="Enter your name" required>
+                    </label>
+
+                    <label class="field-label" for="messageInput">
+                        Message
+                        <textarea id="messageInput" name="message" rows="5" placeholder="Write your birthday wish..." required></textarea>
+                    </label>
+
+                    <button class="primary-btn" type="submit">Save note</button>
+                    <p id="messageStatus" class="form-status" aria-live="polite"></p>
+                </form>
+
+                <div class="message-table-card">
+                    <div class="table-heading">
+                        <div>
+                            <p class="soft-card-label">Saved wishes</p>
+                            <h2 class="table-title">Messages so far</h2>
+                        </div>
+                        <p id="entryCount" class="entry-count">0 notes</p>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="message-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Message</th>
+                                    <th>Saved</th>
+                                </tr>
+                            </thead>
+                            <tbody id="messageTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

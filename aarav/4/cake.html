@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aarav's Birthday Cake</title>
+    <link rel="stylesheet" href="theme.css">
+    <script src="site.js" defer></script>
+</head>
+<body class="page-cake">
+    <main class="shell">
+        <header class="topbar">
+            <span class="progress-chip">02 / 05</span>
+            <a class="ghost-link" href="index.html">Back to start</a>
+        </header>
+
+        <section class="main-panel">
+            <div class="section-heading center">
+                <p class="kicker">Candle Challenge</p>
+                <h1 class="hero-title medium">Blow out the flames.</h1>
+                <p class="hero-copy narrow">
+                    Tap every candle on Aarav's cake. When the last flame goes out, the gift unlocks.
+                </p>
+            </div>
+
+            <div class="cake-stage" data-cake-scene>
+                <div class="cake-status-row">
+                    <div class="game-pill">
+                        <span class="game-pill-label">Candles remaining</span>
+                        <strong class="game-progress-count" id="candleProgressText">6 candles still glowing</strong>
+                    </div>
+                    <p class="game-note">Six bright flames, one birthday wish, and no skipping the cake ceremony.</p>
+                </div>
+
+                <div class="cake-scene">
+                    <div class="confetti-piece confetti-a" aria-hidden="true"></div>
+                    <div class="confetti-piece confetti-b" aria-hidden="true"></div>
+                    <div class="confetti-piece confetti-c" aria-hidden="true"></div>
+
+                    <img class="cake-image" src="assets/Cake.png" alt="Birthday cake illustration" data-cake-x="50" data-cake-y="54">
+
+                    <div class="candles-layer" aria-label="Birthday cake candles">
+                        <div class="candle-shell" data-candle data-flame-x="31" data-flame-y="-14" aria-label="Blow out candle 1">
+                            <div class="candle-body" aria-hidden="true"><span class="wax"></span></div>
+                            <button class="candle-flame" type="button" aria-label="Blow out candle 1"><span class="flame-glow"></span><span class="flame"></span><span class="smoke"></span></button>
+                        </div>
+
+                        <div class="candle-shell" data-candle data-flame-x="39" data-flame-y="-14" aria-label="Blow out candle 2">
+                            <div class="candle-body" aria-hidden="true"><span class="wax"></span></div>
+                            <button class="candle-flame" type="button" aria-label="Blow out candle 2"><span class="flame-glow"></span><span class="flame"></span><span class="smoke"></span></button>
+                        </div>
+                        <div class="candle-shell" data-candle data-flame-x="46" data-flame-y="-14" aria-label="Blow out candle 3">
+                            <div class="candle-body" aria-hidden="true"><span class="wax"></span></div>
+                            <button class="candle-flame" type="button" aria-label="Blow out candle 3"><span class="flame-glow"></span><span class="flame"></span><span class="smoke"></span></button>
+                        </div>
+                        <div class="candle-shell" data-candle data-flame-x="54" data-flame-y="-14" aria-label="Blow out candle 4">
+                            <div class="candle-body" aria-hidden="true"><span class="wax"></span></div>
+                            <button class="candle-flame" type="button" aria-label="Blow out candle 4"><span class="flame-glow"></span><span class="flame"></span><span class="smoke"></span></button>
+                        </div>
+                        <div class="candle-shell" data-candle data-flame-x="62" data-flame-y="-14" aria-label="Blow out candle 5">
+                            <div class="candle-body" aria-hidden="true"><span class="wax"></span></div>
+                            <button class="candle-flame" type="button" aria-label="Blow out candle 5"><span class="flame-glow"></span><span class="flame"></span><span class="smoke"></span></button>
+                        </div>
+                        <div class="candle-shell" data-candle data-flame-x="69.5" data-flame-y="-14" aria-label="Blow out candle 6">
+                            <div class="candle-body" aria-hidden="true"><span class="wax"></span></div>
+                            <button class="candle-flame" type="button" aria-label="Blow out candle 6"><span class="flame-glow"></span><span class="flame"></span><span class="smoke"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="birthday-modal" id="cakeSuccessModal" hidden>
+        <div class="birthday-modal-card" role="dialog" aria-modal="true" aria-labelledby="cakeModalTitle">
+            <p class="kicker">Wish Unlocked</p>
+            <h2 class="hero-title medium" id="cakeModalTitle">All candles are out.</h2>
+            <p class="hero-copy narrow">
+                The wish is sealed. The lights are up. Aarav's gift is ready to open.
+            </p>
+            <div class="button-row center-row">
+                <a class="primary-btn" href="gift.html">Open the gift</a>
+            </div>
+        </div>
+    </div>
+    <div class="hanging-miku" aria-hidden="true">
+        <img src="assets/Miku.png" alt="">
+    </div>
+</body>
+</html>

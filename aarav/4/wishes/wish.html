@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Wishes Collector</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #071118;
+            --panel: #102433;
+            --panel-2: #183344;
+            --text: #f7fbfb;
+            --muted: #b8d7d7;
+            --accent: #32d1b8;
+            --accent-2: #ffb15f;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, var(--bg), var(--panel-2));
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+        main {
+            width: min(760px, 100%);
+            background: rgba(16, 36, 51, 0.95);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+        }
+        h1 { margin-top: 0; font-size: 1.9rem; }
+        p { color: var(--muted); line-height: 1.6; }
+        form { display: grid; gap: 14px; margin-top: 20px; }
+        label { display: grid; gap: 8px; font-weight: 600; }
+        input, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            font: inherit;
+        }
+        textarea { min-height: 120px; resize: vertical; }
+        .char-count {
+            justify-self: end;
+            color: var(--muted);
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+        button {
+            border: 0;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font-weight: 700;
+            color: #071118;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            cursor: pointer;
+        }
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .secondary-btn {
+            background: rgba(255,255,255,0.12);
+            color: var(--text);
+        }
+        .status {
+            min-height: 1.4em;
+            margin-top: 12px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .entries {
+            margin-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.14);
+            padding-top: 18px;
+        }
+        ul { padding-left: 18px; color: var(--muted); }
+        li { margin-bottom: 10px; }
+        .small { font-size: 0.92rem; color: var(--muted); }
+        .note { font-size: 0.9rem; color: var(--muted); margin-top: 8px; }
+        .setup-note {
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 12px 14px;
+            background: rgba(255,255,255,0.06);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Birthday wishes for AArav</h1>
+        <p>This page is for collecting birthday wishes from friends and family. Write one message and it will be sent to the birthday sheet.</p>
+
+        <form id="wishForm">
+            <label>
+                Your name
+                <input id="nameInput" name="name" type="text" placeholder="Enter your name" required>
+            </label>
+            <label>
+                Your wish
+                <textarea id="messageInput" name="message" maxlength="800" placeholder="Write your happy birthday wish" required></textarea>
+                <span id="charCount" class="char-count">0 / 800</span>
+            </label>
+            <button type="submit">Save wish</button>
+        </form>
+
+        <div class="action-row">
+            <button id="exportBtn" class="secondary-btn" type="button">Export wishes</button>
+            <button id="importBtn" class="secondary-btn" type="button">Import wishes</button>
+        </div>
+        <input id="importInput" type="file" accept="application/json" hidden>
+
+        <p id="statusMessage" class="status">Ready to collect wishes.</p>
+        <p class="note setup-note">If the internet is slow, the wish is still saved in this browser first. The export button is a backup.</p>
+
+        <section class="entries">
+            <h2>Saved wishes</h2>
+            <p class="small">These are the wishes saved on this device. The main copy should be in the Google Sheet.</p>
+            <ul id="wishList"></ul>
+        </section>
+    </main>
+
+    <script>
+        const form = document.getElementById("wishForm");
+        const statusMessage = document.getElementById("statusMessage");
+        const wishList = document.getElementById("wishList");
+        const exportBtn = document.getElementById("exportBtn");
+        const importBtn = document.getElementById("importBtn");
+        const importInput = document.getElementById("importInput");
+        const messageInput = document.getElementById("messageInput");
+        const charCount = document.getElementById("charCount");
+        const storageKey = "aarav-wishes";
+        const googleSheetsWebhookUrl = "https://script.google.com/macros/s/AKfycbyrclG5jL1WGFY7NSznEJXDj42b37nxo7zyBdWX5jJe0k06eNLVwqorCNdQWZLrGjquqw/exec";
+        const googleSheetId = "";
+
+        function loadWishes() {
+            const stored = localStorage.getItem(storageKey);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveWishes(wishes) {
+            localStorage.setItem(storageKey, JSON.stringify(wishes));
+        }
+
+        function downloadWishes(wishes) {
+            const blob = new Blob([JSON.stringify(wishes, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "aarav-wishes.json";
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        async function syncToRemote(wish) {
+            if (!googleSheetsWebhookUrl || googleSheetsWebhookUrl.includes("/macros/s/.../exec")) {
+                return { ok: true, skipped: true };
+            }
+
+            try {
+                const body = new URLSearchParams({
+                    id: wish.id,
+                    name: wish.name,
+                    message: wish.message,
+                    createdAt: wish.createdAt,
+                    sheetId: googleSheetId
+                });
+
+                await fetch(googleSheetsWebhookUrl, {
+                    method: "POST",
+                    body,
+                    mode: "no-cors",
+                    redirect: "follow"
+                });
+
+                return { ok: true, skipped: false };
+            } catch (error) {
+                console.warn("Remote sync failed", error);
+                return { ok: false, skipped: false, error };
+            }
+        }
+
+        function renderWishes(wishes) {
+            wishList.replaceChildren();
+
+            if (!wishes.length) {
+                const empty = document.createElement("li");
+                empty.textContent = "No wishes saved yet.";
+                wishList.appendChild(empty);
+                return;
+            }
+
+            wishes.forEach(function (wish) {
+                const item = document.createElement("li");
+                const strong = document.createElement("strong");
+                const status = document.createElement("span");
+
+                strong.textContent = wish.name;
+                status.textContent = wish.synced === false ? " saved locally" : " sent";
+                status.className = "small";
+
+                item.appendChild(strong);
+                item.append(`: ${wish.message} `);
+                item.appendChild(status);
+                wishList.appendChild(item);
+            });
+        }
+
+        function createWish(name, message) {
+            return {
+                id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+                name,
+                message,
+                createdAt: new Date().toISOString(),
+                synced: false
+            };
+        }
+
+        function updateCharCount() {
+            charCount.textContent = `${messageInput.value.length} / ${messageInput.maxLength}`;
+        }
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const name = document.getElementById("nameInput").value.trim();
+            const message = messageInput.value.trim();
+
+            if (!name || !message) {
+                statusMessage.textContent = "Please enter both your name and a wish.";
+                return;
+            }
+
+            const wishes = loadWishes();
+            const wish = createWish(name, message);
+            wishes.push(wish);
+            saveWishes(wishes);
+            renderWishes(wishes);
+            form.reset();
+            updateCharCount();
+            statusMessage.textContent = "Wish saved. Sending it to the birthday sheet...";
+
+            const syncResult = await syncToRemote(wish);
+            if (syncResult.ok && !syncResult.skipped) {
+                wish.synced = true;
+                saveWishes(wishes);
+                renderWishes(wishes);
+                statusMessage.textContent = "Wish saved and sent. Thank you!";
+            } else if (syncResult.skipped) {
+                statusMessage.textContent = "Wish saved locally. The Google Sheets URL is not configured yet.";
+            } else {
+                statusMessage.textContent = "Wish saved locally, but sending failed. Please try again or export it later.";
+            }
+        });
+
+        exportBtn.addEventListener("click", function () {
+            downloadWishes(loadWishes());
+            statusMessage.textContent = "Wishes exported.";
+        });
+
+        importBtn.addEventListener("click", function () {
+            importInput.click();
+        });
+
+        importInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function () {
+                try {
+                    const imported = JSON.parse(reader.result);
+                    if (!Array.isArray(imported)) {
+                        throw new Error("Imported file is not a valid wishes list.");
+                    }
+                    saveWishes(imported);
+                    renderWishes(imported);
+                    statusMessage.textContent = "Wishes imported successfully.";
+                } catch (error) {
+                    statusMessage.textContent = error.message;
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        messageInput.addEventListener("input", updateCharCount);
+
+        updateCharCount();
+        renderWishes(loadWishes());
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "aarav-wish-collector",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "sqlite3": "^6.0.1"
+  }
+}
