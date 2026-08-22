@@ -590,12 +590,11 @@ img {
     inset: auto 0 0;
     display: flex;
     justify-content: center;
-    pointer-events: none;
 }
 
 .candle-flame {
     position: absolute;
-    top: 0;
+    bottom: calc(100% - 2.11cqw);
     left: 50%;
     width: 5.79cqw;
     height: 5.79cqw;
