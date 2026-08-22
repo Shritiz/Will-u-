@@ -6,55 +6,9 @@ function initCakePage() {
     }
 
     const candles = Array.from(cakeScene.querySelectorAll("[data-candle]"));
-    const cakeImage = cakeScene.querySelector(".cake-image");
     const progressText = document.getElementById("candleProgressText");
     const modal = document.getElementById("cakeSuccessModal");
     let extinguishedCount = 0;
-
-    function applyCakeOffset() {
-        if (!cakeImage) {
-            return;
-        }
-
-        const cakeX = cakeImage.getAttribute("data-cake-x");
-        const cakeY = cakeImage.getAttribute("data-cake-y");
-
-        if (cakeX !== null) {
-            cakeImage.style.setProperty("--cake-x", `${cakeX}%`);
-        }
-
-        if (cakeY !== null) {
-            cakeImage.style.setProperty("--cake-y", `${cakeY}%`);
-        }
-
-        const rect = cakeImage.getBoundingClientRect();
-        const sceneRect = cakeScene.getBoundingClientRect();
-        const imageWidth = rect.width;
-        const imageHeight = rect.height;
-        const offsetLeft = rect.left - sceneRect.left;
-        const offsetTop = rect.top - sceneRect.top;
-
-        candles.forEach(function (candle) {
-            const flameX = candle.getAttribute("data-flame-x");
-            const flameY = candle.getAttribute("data-flame-y");
-            if (flameX === null || flameY === null) {
-                return;
-            }
-
-            const xPercent = parseFloat(flameX);
-            const yPercent = parseFloat(flameY);
-            const xPx = offsetLeft + (imageWidth * xPercent) / 100;
-            const yPx = offsetTop + (imageHeight * yPercent) / 100;
-
-            candle.style.left = `${xPx}px`;
-            candle.style.top = `${yPx}px`;
-            candle.style.setProperty("--flame-x", "0px");
-            candle.style.setProperty("--flame-y", "0px");
-        });
-    }
-
-    applyCakeOffset();
-    window.addEventListener("resize", applyCakeOffset);
 
     function syncProgress() {
         const remaining = candles.length - extinguishedCount;
@@ -74,16 +28,16 @@ function initCakePage() {
     }
 
     candles.forEach(function (candle) {
-        const flameX = candle.getAttribute("data-flame-x");
-        const flameY = candle.getAttribute("data-flame-y");
+        const candleX = candle.getAttribute("data-candle-x");
+        const candleY = candle.getAttribute("data-candle-y");
         const flameButton = candle.querySelector(".candle-flame");
 
-        if (flameX !== null) {
-            candle.style.setProperty("--flame-x", `${flameX}%`);
+        if (candleX !== null) {
+            candle.style.setProperty("--candle-x", `${candleX}%`);
         }
 
-        if (flameY !== null) {
-            candle.style.setProperty("--flame-y", `${flameY}%`);
+        if (candleY !== null) {
+            candle.style.setProperty("--candle-y", `${candleY}%`);
         }
 
         if (!flameButton) {
