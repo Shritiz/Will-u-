@@ -16,15 +16,6 @@
     --accent-gold: #ffd166;
     --ink: #091016;
     --shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
-
-    --miku-offset-top: -200px;
-    --miku-offset-right: 24px;
-    --miku-width: 148px;
-    --miku-rope-length: 360px;
-    --miku-image-offset-x: 9.5px;
-    --miku-image-offset-y: -10px;
-    --miku-swing-start: -12deg;
-    --miku-swing-end: 10deg;
 }
 
 * {
@@ -101,65 +92,7 @@ img {
     width: min(1280px, calc(100% - 24px));
 }
 
-.hanging-miku {
-    position: fixed;
-    top: var(--miku-offset-top);
-    right: var(--miku-offset-right);
-    width: var(--miku-width);
-    pointer-events: none;
-    transform-origin: top center;
-    animation: miku-pendulum 3.8s ease-in-out infinite;
-    z-index: 3;
-}
-
-.hanging-miku::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 3px;
-    height: var(--miku-rope-length);
-    transform: translateX(-50%);
-    background: linear-gradient(180deg, rgba(248, 251, 248, 0.85), rgba(248, 251, 248, 0.2));
-    border-radius: 2px;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.14);
-}
-
-.hanging-miku img {
-    display: block;
-    width: 100%;
-    margin-top: var(--miku-rope-length);
-    transform-origin: top center;
-    transform: translate(var(--miku-image-offset-x), var(--miku-image-offset-y));
-}
-
-@keyframes miku-pendulum {
-    0% {
-        transform: rotate(var(--miku-swing-start));
-    }
-    50% {
-        transform: rotate(var(--miku-swing-end));
-    }
-    100% {
-        transform: rotate(var(--miku-swing-start));
-    }
-}
-
 @media (max-width: 720px) {
-    .hanging-miku {
-        top: calc(var(--miku-offset-top) - 8px);
-        right: calc(var(--miku-offset-right) - 8px);
-        width: 110px;
-    }
-
-    .hanging-miku::before {
-        height: 120px;
-    }
-
-    .hanging-miku img {
-        margin-top: 120px;
-    }
-
     .message-board-layout {
         grid-template-columns: 1fr;
     }

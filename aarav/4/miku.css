@@ -1,0 +1,65 @@
+:root {
+    /* Keep the character visible while its rope remains attached above the viewport. */
+    --miku-offset-top: clamp(-200px, -12vw, -72px);
+    --miku-offset-right: clamp(12px, 2vw, 24px);
+    --miku-width: clamp(100px, 15vw, 148px);
+    --miku-character-top: clamp(72px, 15vw, 150px);
+    --miku-rope-length: calc(var(--miku-character-top) - var(--miku-offset-top));
+    --miku-image-offset-x: 9.5px;
+    --miku-image-offset-y: -10px;
+    --miku-swing-start: -12deg;
+    --miku-swing-end: 10deg;
+    --miku-z-index: 3;
+}
+
+.hanging-miku {
+    position: fixed;
+    top: var(--miku-offset-top);
+    right: var(--miku-offset-right);
+    width: var(--miku-width);
+    pointer-events: none;
+    transform-origin: top center;
+    animation: miku-pendulum 3.8s ease-in-out infinite;
+    z-index: var(--miku-z-index);
+}
+
+.hanging-miku::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 3px;
+    height: var(--miku-rope-length);
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, rgba(248, 251, 248, 0.85), rgba(248, 251, 248, 0.2));
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.14);
+}
+
+.hanging-miku img {
+    display: block;
+    width: 100%;
+    margin-top: var(--miku-rope-length);
+    transform-origin: top center;
+    transform: translate(var(--miku-image-offset-x), var(--miku-image-offset-y));
+}
+
+@keyframes miku-pendulum {
+    0% {
+        transform: rotate(var(--miku-swing-start));
+    }
+
+    50% {
+        transform: rotate(var(--miku-swing-end));
+    }
+
+    100% {
+        transform: rotate(var(--miku-swing-start));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hanging-miku {
+        animation: none;
+    }
+}
