@@ -78,6 +78,18 @@ function shuffleArray(items) {
     return shuffled;
 }
 
+function preloadImages(paths) {
+    return Promise.all(paths.map(function (path) {
+        return new Promise(function (resolve) {
+            const image = new Image();
+
+            image.onload = resolve;
+            image.onerror = resolve;
+            image.src = path;
+        });
+    }));
+}
+
 function createWishCard(index, stageRect, asset, text) {
     const card = document.createElement("article");
     const image = document.createElement("img");
@@ -172,6 +184,12 @@ function initGiftPage() {
         "Forever fun",
         "Gay"
     ];
+    const imagePreloadPromise = preloadImages([
+        "assets/Hero-Aarav.png",
+        ...numberedAssets.map(function (asset) {
+            return `assets/${asset}`;
+        })
+    ]);
     let state = "closed";
 
     async function scatterWishes() {
@@ -201,6 +219,12 @@ function initGiftPage() {
             return;
         }
 
+        state = "preparing";
+        giftStage.setAttribute("aria-busy", "true");
+        statusText.textContent = "Preparing the birthday memories...";
+        await imagePreloadPromise;
+
+        giftStage.removeAttribute("aria-busy");
         state = "opening";
         document.body.classList.add("is-awake");
         giftBox.classList.add("is-bursting");
@@ -250,7 +274,87 @@ function initGiftPage() {
     });
 }
 
+function initLoveWall() {
+    const wall = document.getElementById("loveWall");
+
+    if (!wall) {
+        return;
+    }
+
+    const wishes = Array.isArray(window.BIRTHDAY_WISHES) ? window.BIRTHDAY_WISHES : [];
+    const wishCount = document.getElementById("wishCount");
+    const senderCount = document.getElementById("senderCount");
+
+    if (wishCount) {
+        wishCount.textContent = wishes.length.toString();
+    }
+
+    if (senderCount) {
+        senderCount.textContent = new Set(wishes.map(function (wish) {
+            return String(wish.name || "").trim().toLocaleLowerCase();
+        }).filter(Boolean)).size.toString();
+    }
+
+    if (!wishes.length) {
+        const emptyState = document.createElement("p");
+        emptyState.className = "love-wall-empty";
+        emptyState.textContent = "The love wall is waiting for its first birthday wish.";
+        wall.appendChild(emptyState);
+        return;
+    }
+
+    const cards = document.createDocumentFragment();
+
+    wishes.forEach(function (wish) {
+        const card = document.createElement("article");
+        const header = document.createElement("header");
+        const sender = document.createElement("div");
+        const avatar = document.createElement("span");
+        const senderDetails = document.createElement("div");
+        const name = document.createElement("p");
+        const submittedAt = document.createElement("time");
+        const message = document.createElement("p");
+        const footer = document.createElement("footer");
+        const id = document.createElement("span");
+        const recordedAt = document.createElement("time");
+        const senderName = String(wish.name || "Someone special").trim() || "Someone special";
+
+        card.className = "love-card";
+        header.className = "love-card-header";
+        sender.className = "love-sender";
+        avatar.className = "love-avatar";
+        senderDetails.className = "love-sender-details";
+        name.className = "love-sender-name";
+        submittedAt.className = "love-sender-time";
+        message.className = "love-message";
+        footer.className = "love-card-footer";
+        id.className = "love-wish-id";
+        recordedAt.className = "love-recorded-at";
+
+        avatar.textContent = senderName.charAt(0).toLocaleUpperCase();
+        name.textContent = senderName;
+        submittedAt.textContent = `Shared on ${wish.submittedAt || "a special day"}`;
+        if (wish.recordedAt) {
+            submittedAt.dateTime = wish.recordedAt;
+            recordedAt.dateTime = wish.recordedAt;
+        }
+        message.textContent = String(wish.message || "");
+        id.textContent = `Wish ID: ${wish.id || "—"}`;
+        recordedAt.textContent = wish.recordedAt ? `Recorded: ${wish.recordedAt}` : "Recorded with love";
+
+        senderDetails.append(name, submittedAt);
+        sender.append(avatar, senderDetails);
+        header.appendChild(sender);
+        footer.append(id, recordedAt);
+        card.append(header, message, footer);
+        cards.appendChild(card);
+    });
+
+    wall.replaceChildren(cards);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     initCakePage();
     initGiftPage();
+    initLoveWall();
 });

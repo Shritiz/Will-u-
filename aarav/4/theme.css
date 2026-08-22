@@ -382,6 +382,171 @@ img {
     color: var(--muted);
 }
 
+.love-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 180px)) minmax(240px, 1fr);
+    align-items: center;
+    gap: 16px;
+    margin: 24px 34px 0;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: linear-gradient(120deg, rgba(255, 209, 102, 0.12), rgba(40, 199, 183, 0.1));
+}
+
+.love-summary-item {
+    display: grid;
+    gap: 3px;
+    text-align: center;
+}
+
+.love-summary-item strong {
+    color: #ffd166;
+    font-family: "Space Grotesk", Arial, sans-serif;
+    font-size: clamp(1.65rem, 4vw, 2.4rem);
+    line-height: 1;
+}
+
+.love-summary-item span,
+.love-summary-copy {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.love-summary-copy {
+    margin: 0;
+    padding-left: 16px;
+    border-left: 1px solid var(--line-strong);
+}
+
+.love-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    padding: 24px 34px 0;
+}
+
+.love-card {
+    position: relative;
+    display: grid;
+    gap: 16px;
+    min-height: 250px;
+    padding: 20px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(5, 16, 22, 0.72));
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+}
+
+.love-card::before {
+    content: "♥";
+    position: absolute;
+    top: -24px;
+    right: 10px;
+    color: rgba(240, 95, 79, 0.2);
+    font-size: 8rem;
+    line-height: 1;
+    transform: rotate(12deg);
+}
+
+.love-card-header,
+.love-card-footer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.love-sender {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.love-avatar {
+    display: grid;
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(255, 209, 102, 0.5);
+    border-radius: 50%;
+    color: #071016;
+    background: linear-gradient(135deg, #ffd166, #ffb15f);
+    font-family: "Space Grotesk", Arial, sans-serif;
+    font-weight: 800;
+}
+
+.love-sender-name,
+.love-sender-time,
+.love-card-footer {
+    margin: 0;
+}
+
+.love-sender-name {
+    overflow: hidden;
+    color: var(--text);
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.love-sender-time,
+.love-card-footer {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.love-sender-time {
+    margin-top: 2px;
+}
+
+.love-message {
+    position: relative;
+    align-self: center;
+    margin: 0;
+    color: #f8fbf8;
+    font-size: 1rem;
+    line-height: 1.7;
+    white-space: pre-line;
+}
+
+.love-card-footer {
+    align-items: flex-end;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.love-wish-id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    overflow-wrap: anywhere;
+}
+
+.love-recorded-at {
+    max-width: 13rem;
+    text-align: right;
+}
+
+.love-wall-empty {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 32px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 20px;
+    color: var(--muted);
+    text-align: center;
+}
+
+.love-wall-action {
+    margin-bottom: 34px;
+}
+
 .primary-btn,
 .secondary-btn {
     display: inline-flex;
@@ -1270,6 +1435,27 @@ img {
 
     .cake-scene {
         min-height: 500px;
+    }
+
+    .love-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .love-summary-copy {
+        grid-column: 1 / -1;
+        padding-top: 12px;
+        padding-left: 0;
+        border-top: 1px solid var(--line-strong);
+        border-left: 0;
+        text-align: center;
+    }
+
+    .love-wall {
+        grid-template-columns: 1fr;
+        padding-right: 20px;
+        padding-left: 20px;
     }
 
     .cake-icing {

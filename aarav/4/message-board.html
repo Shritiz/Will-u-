@@ -3,65 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Guestbook</title>
+    <title>Aarav's Birthday Love Wall</title>
     <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="miku.css">
+    <script src="wishes-data.js" defer></script>
     <script src="site.js" defer></script>
 </head>
 <body class="page-message-board">
     <main class="shell">
         <header class="topbar">
-            <span class="progress-chip">05 / 05</span>
-            <a class="ghost-link" href="final.html">Back to final page</a>
+            <span class="progress-chip">04 / 06</span>
+            <a class="ghost-link" href="gift.html">Back to gift</a>
         </header>
 
         <section class="main-panel message-board-panel">
             <div class="section-heading center">
-                <p class="kicker">Birthday guestbook</p>
-                <h1 class="hero-title medium">Leave a note</h1>
+                <p class="kicker">Birthday love wall</p>
+                <h1 class="hero-title medium">Look how loved you are.</h1>
                 <p class="hero-copy narrow">
-                    Write a message for Aarav and it will be saved in the table below.
+                    Every card is a little piece of love, laughter, and birthday energy sent your way.
                 </p>
             </div>
 
-            <div class="message-board-layout">
-                <form id="messageForm" class="message-form">
-                    <label class="field-label" for="nameInput">
-                        Your name
-                        <input id="nameInput" name="name" type="text" placeholder="Enter your name" required>
-                    </label>
-
-                    <label class="field-label" for="messageInput">
-                        Message
-                        <textarea id="messageInput" name="message" rows="5" placeholder="Write your birthday wish..." required></textarea>
-                    </label>
-
-                    <button class="primary-btn" type="submit">Save note</button>
-                    <p id="messageStatus" class="form-status" aria-live="polite"></p>
-                </form>
-
-                <div class="message-table-card">
-                    <div class="table-heading">
-                        <div>
-                            <p class="soft-card-label">Saved wishes</p>
-                            <h2 class="table-title">Messages so far</h2>
-                        </div>
-                        <p id="entryCount" class="entry-count">0 notes</p>
-                    </div>
-
-                    <div class="table-wrapper">
-                        <table class="message-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Message</th>
-                                    <th>Saved</th>
-                                </tr>
-                            </thead>
-                            <tbody id="messageTableBody"></tbody>
-                        </table>
-                    </div>
+            <div class="love-summary" aria-label="Birthday wish summary">
+                <div class="love-summary-item">
+                    <strong id="wishCount">0</strong>
+                    <span>birthday wishes</span>
                 </div>
+                <div class="love-summary-item">
+                    <strong id="senderCount">0</strong>
+                    <span>people cheering you on</span>
+                </div>
+                <p class="love-summary-copy">Keep every one of these close — they are proof that your people are always in your corner.</p>
+            </div>
+
+            <section class="love-wall" id="loveWall" aria-live="polite" aria-label="Birthday wishes for Aarav"></section>
+
+            <div class="button-row center-row love-wall-action">
+                <a class="primary-btn" href="final.html">Read the birthday letter</a>
             </div>
         </section>
     </main>

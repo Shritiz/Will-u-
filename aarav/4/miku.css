@@ -6,8 +6,8 @@
     --miku-character-top: clamp(72px, 15vw, 150px);
     --miku-rope-length: calc(var(--miku-character-top) - var(--miku-offset-top));
     /* The hand holding the rope sits slightly right and below the image edge. */
-    --miku-rope-anchor-x: 51.5%;
-    --miku-rope-anchor-y: 6%;
+    --miku-rope-anchor-x: 44.2%;
+    --miku-rope-anchor-y: 8%;
     --miku-swing-start: -12deg;
     --miku-swing-end: 10deg;
     --miku-z-index: 3;
