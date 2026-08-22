@@ -410,7 +410,7 @@ img {
 
 .primary-btn:focus-visible,
 .ghost-link:focus-visible,
-.candle-button:focus-visible,
+.candle-flame:focus-visible,
 .gift-stage:focus-visible {
     outline: 3px solid rgba(40, 199, 183, 0.55);
     outline-offset: 4px;
@@ -580,6 +580,8 @@ img {
     position: absolute;
     left: var(--candle-x);
     top: var(--candle-y);
+    width: clamp(24px, 7.37vw, 56px);
+    height: clamp(51px, 15.79vw, 120px);
     width: 7.37cqw;
     height: 15.79cqw;
     transform: translate(-50%, -50%);
@@ -594,8 +596,11 @@ img {
 
 .candle-flame {
     position: absolute;
+    bottom: calc(100% - clamp(7px, 2.11vw, 16px));
     bottom: calc(100% - 2.11cqw);
     left: 50%;
+    width: clamp(19px, 5.79vw, 44px);
+    height: clamp(19px, 5.79vw, 44px);
     width: 5.79cqw;
     height: 5.79cqw;
     padding: 0;
@@ -607,6 +612,8 @@ img {
 
 .wax {
     display: block;
+    width: clamp(8px, 2.37vw, 18px);
+    height: clamp(39px, 12.11vw, 92px);
     width: 2.37cqw;
     height: 12.11cqw;
     border-radius: 999px;
@@ -618,8 +625,11 @@ img {
 
 .flame {
     position: absolute;
+    top: clamp(5px, 1.58vw, 12px);
     top: 1.58cqw;
     left: 50%;
+    width: clamp(8px, 2.37vw, 18px);
+    height: clamp(13px, 3.95vw, 30px);
     width: 2.37cqw;
     height: 3.95cqw;
     transform: translateX(-50%);
@@ -632,8 +642,11 @@ img {
 
 .flame-glow {
     position: absolute;
+    top: clamp(1px, 0.26vw, 2px);
     top: 0.26cqw;
     left: 50%;
+    width: clamp(15px, 4.47vw, 34px);
+    height: clamp(15px, 4.47vw, 34px);
     width: 4.47cqw;
     height: 4.47cqw;
     transform: translateX(-50%);
@@ -646,7 +659,10 @@ img {
 .smoke {
     position: absolute;
     left: 50%;
+    top: clamp(4px, 1.32vw, 10px);
     top: 1.32cqw;
+    width: clamp(15px, 4.47vw, 34px);
+    height: clamp(15px, 4.47vw, 34px);
     width: 4.47cqw;
     height: 4.47cqw;
     border-radius: 50%;
@@ -1254,26 +1270,6 @@ img {
 
     .cake-scene {
         min-height: 500px;
-    }
-
-    .candles-row {
-        top: 108px;
-        width: min(100%, 330px);
-        gap: 4px;
-    }
-
-    .candle-button {
-        height: 118px;
-    }
-
-    .wax {
-        width: 14px;
-        height: 80px;
-    }
-
-    .flame {
-        width: 14px;
-        height: 24px;
     }
 
     .cake-icing {
