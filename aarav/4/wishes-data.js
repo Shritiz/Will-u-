@@ -48,5 +48,47 @@ window.BIRTHDAY_WISHES = [
         name: "Trivikram",
         message: "Iss yo bday enjoy ur day u only 17 once, happy bwday",
         recordedAt: "2026-08-05T06:56:42.989Z"
+    },
+    {
+        submittedAt: "22/08/2026 19:06:52",
+        id: "mt4f9qbu-73fwvj",
+        name: "jatin",
+        message: "happy birthday brop",
+        recordedAt: "2026-08-22T13:36:50.826Z"
+    },
+    {
+        submittedAt: "22/08/2026 19:07:07",
+        id: "mt4fa1x4-1i2cew",
+        name: "Raghav",
+        message: "HB Nigger",
+        recordedAt: "2026-08-22T13:37:05.848Z"
+    },
+    {
+        submittedAt: "22/08/2026 19:07:35",
+        id: "mt4fanj5-eynu6c",
+        name: "Komal",
+        message: "Happy birthday, may the gods be with u",
+        recordedAt: "2026-08-22T13:37:33.857Z"
+    },
+    {
+        submittedAt: "22/08/2026 19:14:49",
+        id: "mt4fjxw0-fp6nyi",
+        name: "Raghav",
+        message: "Happy birthday 🎂",
+        recordedAt: "2026-08-22T13:44:47.184Z"
+    },
+    {
+        submittedAt: "22/08/2026 19:14:59",
+        id: "mt4fk6l4-0cn3or",
+        name: "Nigga",
+        message: "HB",
+        recordedAt: "2026-08-22T13:44:58.456Z"
+    },
+    {
+        submittedAt: "22/08/2026 19:15:25",
+        id: "mt4fkq5y-n1fmi9",
+        name: "Nipesh",
+        message: "Happy birthday bro, love your body",
+        recordedAt: "2026-08-22T13:45:23.830Z"
     }
 ];
